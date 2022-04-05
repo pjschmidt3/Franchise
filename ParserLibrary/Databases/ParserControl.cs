@@ -19,9 +19,12 @@ namespace ParserLibrary.Databases
         public static string csvFile = "Files/TacoBell-US-AL.csv";
 
 
-        public static List<ITrackable> GetAllLocations(string csvFile)
+        public static List<LocationModel> GetAllLocations(string csvFile)
         {
-            List<ITrackable> locations = db.ReadAllRecords(csvFile);
+            List<LocationModel> locations = db
+                .ReadAllRecords(csvFile)
+                .Select(record => new LocationModel { Name = record.Name, GeoPoint = record.GeoPoint, Id = record.Id })
+                .ToList();
             return locations;
         }
 
@@ -35,7 +38,7 @@ namespace ParserLibrary.Databases
             return localList;
         }
 
-        public static void CreateLocation(ITrackable location)
+        public static void CreateLocation(LocationModel location)
         {
             var list = GetListLocations(csvFile);
             list.List.Add(location);
@@ -56,7 +59,7 @@ namespace ParserLibrary.Databases
             list.List.RemoveAt(Id);
         }
 
-        public ParserControl GetFurthestLocations(List<ITrackable> locations)
+        public ParserControl GetFurthestLocations(List<LocationModel> locations)
         {
             ParserControl result = new ParserControl();
 

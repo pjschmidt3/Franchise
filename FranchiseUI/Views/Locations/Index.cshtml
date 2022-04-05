@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ParserLibrary.ITrackable>
+﻿@using ParserLibrary
+@model IEnumerable<LocationModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,10 +16,10 @@
                 <h2>View Locations</h2>
             </header>
             <p>
-                <a asp-action="Create">Create</a> <a asp-controller="Home" asp-action="Index" asp-fragment="promo">Cancel</a>
+                @Html.ActionLink("Create", "Create", "Locations", null, new { @class = "btn" })
+                @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn" })
             </p>
             <table class="table locations" id="LocationsTable">
-
                 <thead>
                     <tr>
                         <th>
@@ -64,13 +65,14 @@
                 </tbody>
             </table>
         </article>
-
     </div>
 </div>
 
 @section scripts {
     <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script>$(document).ready(function () {
+    <script>
+        $(document).ready(function () {
             $('#LocationsTable').DataTable();
-        });</script>
+        });
+    </script>
 }

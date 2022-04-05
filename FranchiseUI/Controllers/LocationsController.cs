@@ -1,4 +1,5 @@
 ﻿using FranchiseUI.Models;
+using GeoCoordinatePortable;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,23 +26,17 @@ namespace FranchiseUI.Controllers
             _logger = logger;
         }
 
-        //GET: LocationsController
-       [HttpGet]
-        public IActionResult Index(List<ITrackable>  view)
-        {
-            return View(view);
-        }
 
-
-        [HttpPost]
-        public ActionResult Index(List<ITrackable> view, string csvFile)
+        [HttpGet]
+        public ActionResult Index()
         {
+            IEnumerable<ITrackable> locations = new List<LocationModel>();
             if (ModelState.IsValid)
             {
-                csvFile = "Files/TacoBell-US-AL.csv";
-                view = ParserControl.GetAllLocations(csvFile);
+                var csvFile = "Files/TacoBell-US-AL.csv";
+                locations = ParserControl.GetAllLocations(csvFile);
             }
-            return View(view);
+            return View(locations);
         }
 
         // GET: LocationsController/Create
@@ -54,14 +49,16 @@ namespace FranchiseUI.Controllers
         // POST: LocationsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ITrackable create)
+        public IActionResult Create(LocationModel model)
         {
+            // eventually you'll need to do this with a database -- once I get some more time I can show you an example
             if (ModelState.IsValid)
             {
-                ParserControl.CreateLocation(create);
+                ParserControl.CreateLocation(model);
             }
 
-            return View(create);
+            // Always redirect to a GET route after completing a POST -- otherwise you run into issues with users pressing the back button
+            return RedirectToAction("Index");
         }
 
         // GET: LocationsController/Details/5

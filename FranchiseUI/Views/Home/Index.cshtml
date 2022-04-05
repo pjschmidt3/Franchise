@@ -103,9 +103,7 @@
         <li>
             <form class="col" asp-action="Index" asp-controller="Locations" method="post">
                 <div class="col" title="View or modify the current list of locations">
-                    <button type="submit" class="button">
-                        Locations
-                    </button>
+                    @Html.ActionLink("Locations", "Index", "Locations", null, new { @class = "button" })
                 </div>
             </form>
         </li>
